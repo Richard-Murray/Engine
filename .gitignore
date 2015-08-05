@@ -1,0 +1,9 @@
+Engine/dep/glm/doc/
+Engine/dep/glfw/docs/
+Engine/dep/stb-master/tests/
+Engine/dep/glm/test/
+FBXLoader*.lib
+Engine.sdf
+Debug/Engine.exe
+Debug/Engine.ilk
+Debug/Engine.pdb
