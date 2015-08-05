@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{58309CB2-160A-4E3A-A4B6-7102F87105E2}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Engine</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\Physx\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Physx\Lib\vc12win32;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>C:\Physx\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Physx\Lib\vc12win32;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;GLM_SWIZZLE;GLM_FORCE_PURE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(ProjectDir)dep/glfw/include;$(ProjectDir)dep/glm;$(ProjectDir)dep/stb-master;$(ProjectDir)dep/FBXLoader;$(ProjectDir)dep/VisualLeakDetector;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(ProjectDir)dep/glfw/lib-vc2012;$(ProjectDir)dep/glm;$(ProjectDir)dep/stb-master;$(ProjectDir)dep/FBXLoader;$(ProjectDir)dep/AntTweakBar/lib;C:\Physx\Lib\vc12win32;$(ProjectDir)dep/VisualLeakDetector;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;FBXLoader_d.lib;vld.lib;PhysX3DEBUG_x86.lib;PhysX3ExtensionsDEBUG.lib;PhysX3CommonDEBUG_x86.lib;PhysX3VehicleDEBUG.lib;PhysX3CharacterKinematicDEBUG_x86.lib;PhysX3CookingDEBUG_x86.lib;PhysXVisualDebuggerSDKDEBUG.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_WARNINGS;GLM_SWIZZLE;GLM_FORCE_PURE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(ProjectDir)dep\glfw\include;$(ProjectDir)dep/glm;$(ProjectDir)dep/stb-master;$(ProjectDir)dep/FBXLoader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(ProjectDir)dep/glfw/lib-vc2012;$(ProjectDir)dep/glm;$(ProjectDir)dep/stb-master;$(ProjectDir)dep/FBXLoader;C:\Physx\Lib\vc12win32</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;FBXLoader.lib;PhysX3Extensions.lib;PhysX3Common_x86.lib;PhysX3Vehicle.lib;PhysX3CharacterKinematic_x86.lib;PhysX3Cooking_x86.lib;PhysXVisualDebuggerSDK.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Application.cpp" />
+    <ClCompile Include="src\core\AssetManager.cpp" />
+    <ClCompile Include="src\core\Camera.cpp" />
+    <ClCompile Include="src\core\comp\Component.cpp" />
+    <ClCompile Include="src\core\comp\PhysicsComponent.cpp" />
+    <ClCompile Include="src\core\comp\PhysxPhysicsComponent.cpp" />
+    <ClCompile Include="src\core\comp\PointLightComponent.cpp" />
+    <ClCompile Include="src\core\comp\RenderableComponent.cpp" />
+    <ClCompile Include="src\core\Entity.cpp" />
+    <ClCompile Include="src\core\EntityManager.cpp" />
+    <ClCompile Include="src\core\gl_core_4_4.c" />
+    <ClCompile Include="src\core\PhysicsManager.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\core\Model.cpp" />
+    <ClCompile Include="src\core\Renderer.cpp" />
+    <ClCompile Include="src\core\RenderTarget.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Application.h" />
+    <ClInclude Include="src\core\AssetManager.h" />
+    <ClInclude Include="src\core\Camera.h" />
+    <ClInclude Include="src\core\comp\Component.h" />
+    <ClInclude Include="src\core\comp\PhysicsComponent.h" />
+    <ClInclude Include="src\core\comp\PhysxPhysicsComponent.h" />
+    <ClInclude Include="src\core\comp\PointLightComponent.h" />
+    <ClInclude Include="src\core\comp\RenderableComponent.h" />
+    <ClInclude Include="src\core\Entity.h" />
+    <ClInclude Include="src\core\EntityManager.h" />
+    <ClInclude Include="src\core\gl_core_4_4.h" />
+    <ClInclude Include="src\core\Model.h" />
+    <ClInclude Include="src\core\PhysicsManager.h" />
+    <ClInclude Include="src\core\Renderer.h" />
+    <ClInclude Include="src\core\RenderTarget.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
