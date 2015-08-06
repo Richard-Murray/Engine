@@ -59,9 +59,33 @@ private:
 	//float m_radius;
 };
 
-class SpringJoint : public PhysicsComponent
+class SpringJoint
 {
+public:
+	SpringJoint(PhysicsComponent* connection1, PhysicsComponent* connection2, float springCoefficient, float damping)
+	{
+		_connections[0] = connection1;
+		_connections[1] = connection2;
+		_springCoefficient = springCoefficient;
+		_damping = damping;
+		_restLength = glm::length(_connections[0]->GetPosition() - _connections[1]->GetPosition());
+	}
 
+	void virtual Update(glm::vec3 gravity, float timeStep)
+	{
+		float displacement = glm::length(_connections[0]->GetPosition() - _connections[1]->GetPosition()) - _restLength;
+		float force = -_springCoefficient * displacement;
+
+		_connections[1]->ApplyForce(-glm::vec3(_connections[0]->GetPosition() - _connections[1]->GetPosition()) * force);
+
+	}
+
+private:
+	//void virtual debug();
+	PhysicsComponent* _connections[2];
+	float _damping;
+	float _restLength;
+	float _springCoefficient;
 
 };
 

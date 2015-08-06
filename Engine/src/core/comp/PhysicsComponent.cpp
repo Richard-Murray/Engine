@@ -41,8 +41,6 @@ void PhysicsComponent::Update(float deltaTime)
 	//glm::mat4 rotMatrix = <calculate rotation matrix based on angular velocity>
 
 
-
-	//calc physicstransform
 	//m_parent->SetWorldTransform(m_physicsTransform);
 	//m_parent->SetWorldTranslation(m_parent->GetWorldTransform()[3].xyz + glm::vec3(0, -0.1f, 0));
 }

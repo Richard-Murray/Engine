@@ -8,3 +8,5 @@ Debug/Engine.exe
 Debug/Engine.ilk
 Debug/Engine.pdb
 Release/Engine.pdb
+Engine/Debug
+Engine/Release

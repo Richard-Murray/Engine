@@ -95,6 +95,7 @@ void PhysxPhysicsComponent::SetSphere(float radius, float density, bool dynamic)
 
 	glm::mat4 parentTransform = m_parent->GetWorldTransform();
 	PxTransform transform(*(PxMat44*)(&parentTransform[0]));
+	//parentTransform = (*(glm::mat4*)(&transform));
 		/*PxMat44(PxVec4(parentTransform[0].x, parentTransform[0].y, parentTransform[0].z, parentTransform[0].w),
 		PxVec4(parentTransform[1].x, parentTransform[1].y, parentTransform[1].z, parentTransform[1].w),
 		PxVec4(parentTransform[2].x, parentTransform[2].y, parentTransform[2].z, parentTransform[2].w),

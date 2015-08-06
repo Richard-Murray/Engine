@@ -99,7 +99,10 @@
     <ClCompile Include="src\core\Entity.cpp" />
     <ClCompile Include="src\core\EntityManager.cpp" />
     <ClCompile Include="src\core\gl_core_4_4.c" />
+    <ClCompile Include="src\core\ParticleEmitter.cpp" />
+    <ClCompile Include="src\core\ParticleFluidEmitter.cpp" />
     <ClCompile Include="src\core\PhysicsManager.cpp" />
+    <ClCompile Include="src\core\PhysxRagdoll.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\core\Model.cpp" />
     <ClCompile Include="src\core\Renderer.cpp" />
@@ -118,7 +121,10 @@
     <ClInclude Include="src\core\EntityManager.h" />
     <ClInclude Include="src\core\gl_core_4_4.h" />
     <ClInclude Include="src\core\Model.h" />
+    <ClInclude Include="src\core\ParticleEmitter.h" />
+    <ClInclude Include="src\core\ParticleFluidEmitter.h" />
     <ClInclude Include="src\core\PhysicsManager.h" />
+    <ClInclude Include="src\core\PhysxRagdoll.h" />
     <ClInclude Include="src\core\Renderer.h" />
     <ClInclude Include="src\core\RenderTarget.h" />
   </ItemGroup>

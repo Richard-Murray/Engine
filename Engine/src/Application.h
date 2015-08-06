@@ -19,6 +19,11 @@
 #include <PxScene.h>
 #include <pvd/PxVisualDebugger.h>
 
+#include "core/ParticleEmitter.h"
+#include "core/ParticleFluidEmitter.h"
+
+#include "core/comp/PhysicsComponent.h"
+
 using namespace physx;
 
 class FlyCamera;
@@ -77,6 +82,10 @@ private:
 
 	MyControllerHitReport* myHitReport;
 	PxController* g_PlayerController;
+
+	ParticleFluidEmitter* m_particleEmitter;
+	SpringJoint* m_testSpringJoint;
+
 	float _characterYVelocity;
 	float _characterXVelocity;
 	float _playerGravity;
@@ -122,7 +131,8 @@ public:
 
 private:
 	PxVec3 _playerContactNormal;
-};
+};
+
 
 
 

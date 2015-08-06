@@ -297,6 +297,17 @@ void Application::Update(float deltaTime)
 	//Entity* playerVisual = m_entityManager->GetEntity("Capsuletest");
 	//if (playerVisual != nullptr)
 	//	m_entityManager->GetEntity("Capsuletest")->SetWorldTranslation(glm::vec3(g_PlayerController->getPosition().x, g_PlayerController->getPosition().y, g_PlayerController->getPosition().z));
+
+	if (m_particleEmitter)
+	{
+		m_particleEmitter->update(deltaTime);
+		//render all our particles
+		m_particleEmitter->renderParticles();
+	}
+
+	static_cast<PhysicsComponent*>(m_entityManager->GetEntity("Jointtestfixed")->GetComponentOfType("Physics"))->SetPosition(glm::vec3(sinf(glfwGetTime()) * 5 + 30, 15, 40));
+	m_testSpringJoint->Update(glm::vec3(0, -1, 0), deltaTime);
+
 }
 
 void Application::Draw()
@@ -460,9 +471,9 @@ void Application::Load()
 	static_cast<PhysicsComponent*>(m_entityManager->GetNewEntity()->GetComponentOfType("Physics"))->SetSphere(10, 7);
 	static_cast<PhysicsComponent*>(m_entityManager->GetNewEntity()->GetComponentOfType("Physics"))->SetStatic(true);
 
-	/*m_entityManager->CreateEntity("Jointtestfixed");
+	m_entityManager->CreateEntity("Jointtestfixed");
 	m_entityManager->GetNewEntity()->Initialise(m_assetManager);
-	m_entityManager->GetNewEntity()->SetWorldTranslation(vec3(40, 10, 40));
+	m_entityManager->GetNewEntity()->SetWorldTranslation(vec3(40, 15, 40));
 	m_entityManager->AttachRenderable(m_entityManager->GetNewEntity(), "Sphere", "GeometryPass", "Gold");
 	static_cast<RenderableComponent*>(m_entityManager->GetNewEntity()->GetComponentOfType("Renderable"))->SetRenderableTransform(glm::mat4(2.5f, 0, 0, 0,
 		0, 2.5f, 0, 0,
@@ -470,7 +481,23 @@ void Application::Load()
 		0, 0, 0, 1));
 	m_entityManager->AttachPhysics(m_entityManager->GetNewEntity());
 	static_cast<PhysicsComponent*>(m_entityManager->GetNewEntity()->GetComponentOfType("Physics"))->SetSphere(10, 3.5f);
-	static_cast<PhysicsComponent*>(m_entityManager->GetNewEntity()->GetComponentOfType("Physics"))->SetStatic(true);*/
+	static_cast<PhysicsComponent*>(m_entityManager->GetNewEntity()->GetComponentOfType("Physics"))->SetStatic(true);
+
+	m_entityManager->CreateEntity("Jointtestmoving");
+	m_entityManager->GetNewEntity()->Initialise(m_assetManager);
+	m_entityManager->GetNewEntity()->SetWorldTranslation(vec3(40, 7, 40));
+	m_entityManager->AttachRenderable(m_entityManager->GetNewEntity(), "Sphere", "GeometryPass", "Gold");
+	/*static_cast<RenderableComponent*>(m_entityManager->GetNewEntity()->GetComponentOfType("Renderable"))->SetRenderableTransform(glm::mat4(2.5f, 0, 0, 0,
+		0, 2.5f, 0, 0,
+		0, 0, 2.5f, 0,
+		0, 0, 0, 1));*/
+	m_entityManager->AttachPhysics(m_entityManager->GetNewEntity());
+	static_cast<PhysicsComponent*>(m_entityManager->GetNewEntity()->GetComponentOfType("Physics"))->SetSphere(10, 0.7f);
+
+	m_testSpringJoint = new SpringJoint(static_cast<PhysicsComponent*>(m_entityManager->GetEntity("Jointtestfixed")->GetComponentOfType("Physics")),
+										static_cast<PhysicsComponent*>(m_entityManager->GetEntity("Jointtestmoving")->GetComponentOfType("Physics")), 1, 0.999f); //coefficient?
+
+	static_cast<PhysicsComponent*>(m_entityManager->GetEntity("Jointtestfixed")->GetComponentOfType("Physics"))->SetPosition(glm::vec3(30, 15, 40));
 
 	/*for (int i = 0; i < 5000; ++i)
 	{
@@ -484,6 +511,30 @@ void Application::Load()
 	//static_cast<PointLightComponent*>(m_entityManager->GetNewEntity()->GetComponentOfType("PointLight"))->SetDiffuse(vec3(1, 0, 0));
 
 	AddTestPhysxContent();
+
+	//Particle emitter stuff
+	PxParticleFluid* pf;
+
+	PxU32 maxParticles = 4000;
+	bool perParticleRestOffset = false;
+	pf = g_Physics->createParticleFluid(maxParticles, perParticleRestOffset);
+
+	pf->setRestParticleDistance(0.3f);
+	pf->setDynamicFriction(0.1);
+	pf->setStaticFriction(0.1);
+	pf->setDamping(0.1);
+	pf->setParticleMass(0.1);
+	pf->setRestitution(0);
+	
+	pf->setParticleBaseFlag(PxParticleBaseFlag::eCOLLISION_TWOWAY, true);
+	pf->setStiffness(100);
+
+	if (pf)
+	{
+		g_PhysicsScene->addActor(*pf);
+		m_particleEmitter = new ParticleFluidEmitter(maxParticles, PxVec3(0, 10, 0), pf, .1);
+		m_particleEmitter->setStartVelocityRange(-2, -250, -2, 2, -250, 2);
+	}
 }
 
 void Application::InitialisePhysX()
