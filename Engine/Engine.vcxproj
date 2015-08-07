@@ -71,7 +71,7 @@
       <WarningLevel>Level3</WarningLevel>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <Optimization>MaxSpeed</Optimization>
+      <Optimization>Disabled</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_WARNINGS;GLM_SWIZZLE;GLM_FORCE_PURE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -81,10 +81,10 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>false</EnableCOMDATFolding>
+      <OptimizeReferences>false</OptimizeReferences>
       <AdditionalLibraryDirectories>$(ProjectDir)dep/glfw/lib-vc2012;$(ProjectDir)dep/glm;$(ProjectDir)dep/stb-master;$(ProjectDir)dep/FBXLoader;C:\Physx\Lib\vc12win32</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;FBXLoader.lib;PhysX3Extensions.lib;PhysX3Common_x86.lib;PhysX3Vehicle.lib;PhysX3CharacterKinematic_x86.lib;PhysX3Cooking_x86.lib;PhysXVisualDebuggerSDK.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;FBXLoader.lib;PhysX3_x86.lib;PhysX3Extensions.lib;PhysX3Common_x86.lib;PhysX3Vehicle.lib;PhysX3CharacterKinematic_x86.lib;PhysX3Cooking_x86.lib;PhysXVisualDebuggerSDK.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

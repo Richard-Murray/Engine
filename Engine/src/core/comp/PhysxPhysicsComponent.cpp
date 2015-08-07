@@ -19,6 +19,19 @@ PhysxPhysicsComponent::~PhysxPhysicsComponent()
 void PhysxPhysicsComponent::Initialise()
 {
 	SetComponentType("PhysxPhysics");
+	//m_dynamicActor->setName("unnamed");
+}
+
+void PhysxPhysicsComponent::SetName(const char* name, bool dynamic)
+{
+	if (dynamic)
+	{
+		m_dynamicActor->setName(name);
+	}
+	else
+	{
+		m_staticActor->setName(name);
+	}
 }
 
 void PhysxPhysicsComponent::SetPhysicsScene(PxPhysics* physics, PxScene* physicsScene)
@@ -76,12 +89,15 @@ void PhysxPhysicsComponent::SetBox(glm::vec3 boxGeometry, float density, bool dy
 	if (dynamic)
 	{
 		m_dynamicActor = PxCreateDynamic(*m_physics, transform, box, *m_material, density);
+		m_dynamicActor->setName("unnamed");
 		m_physicsScene->addActor(*m_dynamicActor);
 		m_dynamic = dynamic;
+
 	}
 	else
 	{
 		m_staticActor = PxCreateStatic(*m_physics, transform, box, *m_material);
+		m_staticActor->setName("unnamed");
 		m_physicsScene->addActor(*m_staticActor);
 		m_dynamic = dynamic;
 	}
@@ -104,12 +120,14 @@ void PhysxPhysicsComponent::SetSphere(float radius, float density, bool dynamic)
 	if (dynamic)
 	{
 		m_dynamicActor = PxCreateDynamic(*m_physics, transform, sphere, *m_material, density);
+		m_dynamicActor->setName("unnamed");
 		m_physicsScene->addActor(*m_dynamicActor);
 		m_dynamic = dynamic;
 	}
 	else
 	{
 		m_staticActor = PxCreateStatic(*m_physics, transform, sphere, *m_material);
+		m_staticActor->setName("unnamed");
 		m_physicsScene->addActor(*m_staticActor);
 		m_dynamic = dynamic;
 	}
@@ -128,12 +146,14 @@ void PhysxPhysicsComponent::SetCapsule(float radius, float halfHeight, float den
 	if (dynamic)
 	{
 		m_dynamicActor = PxCreateDynamic(*m_physics, transform, capsule, *m_material, density);
+		m_dynamicActor->setName("unnamed");
 		m_physicsScene->addActor(*m_dynamicActor);
 		m_dynamic = dynamic;
 	}
 	else
 	{
 		m_staticActor = PxCreateStatic(*m_physics, transform, capsule, *m_material);
+		m_staticActor->setName("unnamed");
 		m_physicsScene->addActor(*m_staticActor);
 		m_dynamic = dynamic;
 	}

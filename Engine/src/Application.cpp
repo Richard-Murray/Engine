@@ -309,7 +309,8 @@ void Application::Update(float deltaTime)
 	m_testSpringJoint->Update(glm::vec3(0, -1, 0), deltaTime);
 
 	//RAGDOLLS
-	
+	
+
 	
 	//m_entityManager->GetEntity("ragdollrenderer")->SetWorldTranslation
 
@@ -405,7 +406,8 @@ void Application::Load()
 		0, 0, 0, 1));
 	m_entityManager->AttachPhysxPhysics(m_entityManager->GetNewEntity(), g_Physics, g_PhysicsScene);
 	//static_cast<PhysxPhysicsComponent*>(m_entityManager->GetNewEntity()->GetComponentOfType("PhysxPhysics"))->SetBox(glm::vec3(1, 1, 3), 10, true);
-	static_cast<PhysxPhysicsComponent*>(m_entityManager->GetNewEntity()->GetComponentOfType("PhysxPhysics"))->AttachRigidBodyConvex(m_assetManager->GetModel("Sword2")->GetModel(), 10, g_PhysicsMaterial, g_PhysicsCooker);
+	PhysxPhysicsComponent* test = static_cast<PhysxPhysicsComponent*>(m_entityManager->GetNewEntity()->GetComponentOfType("PhysxPhysics"));
+	test->AttachRigidBodyConvex(m_assetManager->GetModel("Sword2")->GetModel(), 10, g_PhysicsMaterial, g_PhysicsCooker);
 
 	/*m_entityManager->CreateEntity("Test2");
 	m_entityManager->GetNewEntity()->Initialise(m_assetManager);
@@ -545,6 +547,7 @@ void Application::Load()
 	m_ragdollTest = new Ragdoll(g_Physics, PxTransform(PxVec3(-5, 50, 0)), 0.1f, g_PhysicsMaterial, g_PhysicsScene);
 
 
+	//std::string test = "ragdollrenderer" + std::to_string(5); //test.c_str()
 	m_entityManager->CreateEntity("ragdollrenderer");
 	m_entityManager->GetNewEntity()->Initialise(m_assetManager);
 	m_entityManager->AttachRenderable(m_entityManager->GetNewEntity(), "Sphere", "GeometryPass", "Cyan");
@@ -574,6 +577,7 @@ void Application::InitialisePhysX()
 
 	g_PhysicsCooker = PxCreateCooking(PX_PHYSICS_VERSION, *g_PhysicsFoundation, PxCookingParams(PxTolerancesScale()));
 
+	//PxSimulationEventCallback* myCollisionCallBack = new MyCollisionCallBack
 }
 
 void Application::InitialisePlayerController()

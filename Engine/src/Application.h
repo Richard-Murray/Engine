@@ -8,6 +8,8 @@
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
 
+#include <iostream>
+
 #include "FBXFile.h"
 
 #include "core/Renderer.h"
@@ -137,7 +139,37 @@ private:
 	PxVec3 _playerContactNormal;
 };
 
-
+class MyCollisionCallBack : public PxSimulationEventCallback
+{
+	virtual void onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs)
+	{
+		for (PxU32 i = 0; i < nbPairs; i++)
+		{
+			const PxContactPair& cp = pairs[i];
+			//only interested in touches found and lost
+			if (cp.events & PxPairFlag::eNOTIFY_TOUCH_FOUND)
+			{
+				cout << "Collision Detected between: ";
+				cout << pairHeader.actors[0]->getName();
+				cout << pairHeader.actors[1]->getName() << endl;
+			}
+		}
+	};
+	virtual void onTrigger(PxTriggerPair* pairs, PxU32 nbPairs)
+	{
+		for (PxU32 i = 0; i < nbPairs; i++)
+		{
+			PxTriggerPair* pair = pairs + i;
+			PxActor* triggerActor = pair->triggerActor;
+			PxActor* otherActor = pair->otherActor;
+			std::cout << otherActor->getName();
+			std::cout << " Entered Trigger ";
+			std::cout << triggerActor->getName() << endl;
+		}
+	};	virtual void onConstraintBreak(PxConstraintInfo*, PxU32){};
+	virtual void onWake(PxActor**, PxU32){};
+	virtual void onSleep(PxActor**, PxU32){};
+};
 
 
 #endif

@@ -20,6 +20,7 @@ public:
 	void Update(float deltaTime);
 
 	void Initialise();
+	void SetName(const char* name, bool dynamic);
 	void SetPhysicsScene(PxPhysics* physics, PxScene* physicsScene);
 	void SetPhysicsObjectType(const char* type);
 	void SetBox(glm::vec3 boxGeometry, float density, bool dynamic);
