@@ -14,6 +14,11 @@
 #include "Camera.h"
 #include "RenderTarget.h"
 
+
+//#include "PhysxRagdoll.h"
+class Ragdoll;
+class ParticleFluidEmitter;
+
 class Entity;
 
 class AssetManager;
@@ -54,6 +59,8 @@ public:
 	void AddEntityManager(EntityManager* entityManager);
 	void AddAssetManager(AssetManager* assetManager);
 	void AddCheckersManager(CheckersManager* checkersManager);
+	void AddRagdollRendering(Ragdoll* pRagdoll); //all temporary
+	void AddFluidRendering(ParticleFluidEmitter* pFluidEmitter);
 
 	void DrawGeometryPass(BaseCamera* camera);
 	void DrawLightPass(BaseCamera* camera);
@@ -115,6 +122,11 @@ private:
 	void CreateFullScreenQuad();
 	unsigned int m_VAOfullScreenQuad;
 
+	//Ragdoll pointer for rendering
+	Ragdoll* m_pRagdoll;
+
+	//same with fluids
+	ParticleFluidEmitter* m_pFluidEmitter;
 };
 
 

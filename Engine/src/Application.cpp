@@ -232,7 +232,7 @@ void Application::Update(float deltaTime)
 	
 	//CHARACTER CONTROLLER
 	bool onGround; //set to true if we are on the ground
-	float movementSpeed = 10.0f; //forward and back movement speed
+	float movementSpeed = 1.0f; //forward and back movement speed
 	float rotationSpeed = 1.0f; //turn speed
 	//check if we have a contact normal. if y is greater than .3 we assume this is	solid ground.This is a rather primitive way to do this.Can you do better ?
 		if (myHitReport->getPlayerContactNormal().y > 0.3f)
@@ -302,11 +302,17 @@ void Application::Update(float deltaTime)
 	{
 		m_particleEmitter->update(deltaTime);
 		//render all our particles
-		m_particleEmitter->renderParticles();
+		//m_particleEmitter->renderParticles();
 	}
 
 	static_cast<PhysicsComponent*>(m_entityManager->GetEntity("Jointtestfixed")->GetComponentOfType("Physics"))->SetPosition(glm::vec3(sinf(glfwGetTime()) * 5 + 30, 15, 40));
 	m_testSpringJoint->Update(glm::vec3(0, -1, 0), deltaTime);
+
+	//RAGDOLLS
+	
+	
+	//m_entityManager->GetEntity("ragdollrenderer")->SetWorldTranslation
+
 
 }
 
@@ -535,6 +541,21 @@ void Application::Load()
 		m_particleEmitter = new ParticleFluidEmitter(maxParticles, PxVec3(0, 10, 0), pf, .1);
 		m_particleEmitter->setStartVelocityRange(-2, -250, -2, 2, -250, 2);
 	}
+
+	m_ragdollTest = new Ragdoll(g_Physics, PxTransform(PxVec3(-5, 50, 0)), 0.1f, g_PhysicsMaterial, g_PhysicsScene);
+
+
+	m_entityManager->CreateEntity("ragdollrenderer");
+	m_entityManager->GetNewEntity()->Initialise(m_assetManager);
+	m_entityManager->AttachRenderable(m_entityManager->GetNewEntity(), "Sphere", "GeometryPass", "Cyan");
+	static_cast<RenderableComponent*>(m_entityManager->GetNewEntity()->GetComponentOfType("Renderable"))->SetRenderableTransform(glm::mat4(	0.25f, 0, 0, 0,
+																																			0, 0.25f, 0, 0,
+																																			0, 0, 0.25f, 0,
+																																			0, 0, 0, 1));
+	m_ragdollTest->SetUpRendering(m_entityManager);
+
+	m_renderer->AddRagdollRendering(m_ragdollTest); //ragdollrendering
+	m_renderer->AddFluidRendering(m_particleEmitter);
 }
 
 void Application::InitialisePhysX()

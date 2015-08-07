@@ -5,6 +5,8 @@
 #include <PxScene.h>
 #include <pvd/PxVisualDebugger.h>
 
+#include "EntityManager.h"
+
 using namespace physx;
 
 
@@ -55,26 +57,25 @@ struct RagdollNode
 	};
 };
 
-////complex humanoid ragdoll example
-//RagdollNode* ragdollData[] =
-//{
-//	new RagdollNode(PxQuat(PxPi / 2.0f, Z_AXIS), NO_PARENT, 1, 3, 1, 1, "lower spine"),
-//	new RagdollNode(PxQuat(PxPi, Z_AXIS), LOWER_SPINE, 1, 1, -1, 1, "left pelvis"),
-//	new RagdollNode(PxQuat(0, Z_AXIS), LOWER_SPINE, 1, 1, -1, 1, "right pelvis"),
-//	new RagdollNode(PxQuat(PxPi / 2.0f + 0.2f, Z_AXIS), LEFT_PELVIS, 5, 2, -1, 1, "L upper leg"),
-//	new RagdollNode(PxQuat(PxPi / 2.0f - 0.2f, Z_AXIS), RIGHT_PELVIS, 5, 2, -1, 1, "R upper leg"),
-//	new RagdollNode(PxQuat(PxPi / 2.0f + 0.2f, Z_AXIS), LEFT_UPPER_LEG, 5, 1.75, -1, 1, "L lower leg"),
-//	new RagdollNode(PxQuat(PxPi / 2.0f - 0.2f, Z_AXIS), RIGHT_UPPER_LEG, 5, 1.75, -1, 1, "R lowerleg"),
-//	new RagdollNode(PxQuat(PxPi / 2.0f, Z_AXIS), LOWER_SPINE, 1, 3, 1, -1, "upper spine"),
-//	new RagdollNode(PxQuat(PxPi, Z_AXIS), UPPER_SPINE, 1, 1.5, 1, 1, "left clavicle"),
-//	new RagdollNode(PxQuat(0, Z_AXIS), UPPER_SPINE, 1, 1.5, 1, 1, "right clavicle"),
-//	new RagdollNode(PxQuat(PxPi / 2.0f, Z_AXIS), UPPER_SPINE, 1, 1, 1, -1, "neck"),
-//	new RagdollNode(PxQuat(PxPi / 2.0f, Z_AXIS), NECK, 1, 3, 1, -1, "HEAD"),
-//	new RagdollNode(PxQuat(PxPi - .3, Z_AXIS), LEFT_CLAVICLE, 3, 1.5, -1, 1, "left upper arm"),
-//	new RagdollNode(PxQuat(0.3, Z_AXIS), RIGHT_CLAVICLE, 3, 1.5, -1, 1, "right upper arm"),
-//	new RagdollNode(PxQuat(PxPi - .3, Z_AXIS), LEFT_UPPER_ARM, 3, 1, -1, 1, "left lower arm"),
-//	new RagdollNode(PxQuat(0.3, Z_AXIS), RIGHT_UPPER_ARM, 3, 1, -1, 1, "right lower arm"),
-//	N
+class Ragdoll
+{
+public:
+	Ragdoll(PxPhysics* physics, PxTransform transform, float scaleFactor, PxMaterial* material, PxScene* scene);
+	~Ragdoll();
+
+	PxArticulation* MakeRagdoll(PxPhysics* physics, PxTransform transform, float scaleFactor, PxMaterial* material);
+	void SetUpRendering(EntityManager* pEntityManager);
+
+	PxArticulation* GetArticulation(){ return m_articulation; };
+
+private:
+	RagdollNode** m_ragdollData;
+	PxArticulation* m_articulation;
+
+	EntityManager* m_pEntityManager;
+	Entity* m_renderingEntity;
+
+};
 
 
 

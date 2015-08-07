@@ -1,6 +1,10 @@
 #pragma once
 #include <PxPhysicsAPI.h>
 #include <glm/ext.hpp>
+
+class BaseCamera;
+class Entity;
+
 using namespace physx;
 using namespace std;
 
@@ -23,7 +27,7 @@ public:
 	void update(float delta);
 	void releaseParticle(int);
 	bool tooOld(int);
-	void renderParticles();
+	void renderParticles(BaseCamera* camera, Entity* pRenderingEntity);
 
 	void setStartVelocityRange(float minX, float minY, float minZ, float maxX, float maxY, float maxZ);
 private:

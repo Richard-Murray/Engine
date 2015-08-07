@@ -9,6 +9,8 @@ using glm::vec4;
 using glm::mat4;
 
 #include "comp/RenderableComponent.h"
+#include "PhysxRagdoll.h"
+#include "ParticleFluidEmitter.h"
 
 Renderer::Renderer(FlyCamera* camera, GLFWwindow* window)
 {
@@ -62,6 +64,38 @@ void Renderer::DrawGeometryPass(BaseCamera* camera)
 	{
 		(*iter)->Draw(camera);
 	}
+
+	PxU32 nLinks = m_pRagdoll->GetArticulation()->getNbLinks();
+	PxArticulationLink** links = new PxArticulationLink*[nLinks];
+	m_pRagdoll->GetArticulation()->getLinks(links, nLinks);	while (nLinks--)
+	{
+		PxArticulationLink* link = links[nLinks];
+		PxU32 nShapes = link->getNbShapes();
+		PxShape** shapes = new PxShape*[nShapes];
+		link->getShapes(shapes, nShapes);
+		while (nShapes--)
+		{
+			PxTransform ragTrans = link->getGlobalPose();
+
+			PxVec3 vX = ragTrans.q.getBasisVector0();
+			PxVec3 vY = ragTrans.q.getBasisVector1();
+			PxVec3 vZ = ragTrans.q.getBasisVector2();
+
+			glm::mat4 matrixTransform;
+			matrixTransform[0].xyz = glm::vec3(vX.x, vX.y, vX.z);
+			matrixTransform[1].xyz = glm::vec3(vY.x, vY.y, vY.z);
+			matrixTransform[2].xyz = glm::vec3(vZ.x, vZ.y, vZ.z);
+			matrixTransform[3].xyz = glm::vec3(ragTrans.p.x, ragTrans.p.y, ragTrans.p.z);
+
+			m_pEntityManager->GetEntity("ragdollrenderer")->SetWorldTransform(matrixTransform);
+			static_cast<RenderableComponent*>(m_pEntityManager->GetEntity("ragdollrenderer")->GetComponentOfType("Renderable"))->Draw(camera);
+		}
+	}
+	delete[] links;
+
+	m_pFluidEmitter->renderParticles(camera, m_pEntityManager->GetEntity("ragdollrenderer"));
+
+
 	//m_pEntityManager->GetRenderableComponentList().back()->Draw(camera);
 	//m_pEntityManager->Draw(camera);
 }
@@ -501,4 +535,14 @@ void Renderer::AddEntityManager(EntityManager* entityManager)
 void Renderer::AddCheckersManager(CheckersManager* checkersManager)
 {
 	m_pCheckersManager = checkersManager;
+}
+
+void Renderer::AddRagdollRendering(Ragdoll* pRagdoll) 
+{ 
+	m_pRagdoll = pRagdoll; 
+};//ragdollrendering
+
+void Renderer::AddFluidRendering(ParticleFluidEmitter* pFluidEmitter)
+{
+	m_pFluidEmitter = pFluidEmitter;
 }

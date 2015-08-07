@@ -85,7 +85,8 @@ private:
 	PhysicsComponent* _connections[2];
 	float _damping;
 	float _restLength;
-	float _springCoefficient;
+	float _springCoefficient;
+
 
 };
 

@@ -24,6 +24,8 @@
 
 #include "core/comp/PhysicsComponent.h"
 
+#include "core/PhysxRagdoll.h"
+
 using namespace physx;
 
 class FlyCamera;
@@ -85,6 +87,8 @@ private:
 
 	ParticleFluidEmitter* m_particleEmitter;
 	SpringJoint* m_testSpringJoint;
+
+	Ragdoll* m_ragdollTest;
 
 	float _characterYVelocity;
 	float _characterXVelocity;

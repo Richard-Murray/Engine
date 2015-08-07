@@ -2,6 +2,8 @@
 #include <iostream>
 #include<vector>
 //#include "aieutilities/Gizmos.h"
+#include "Entity.h"
+#include "comp/RenderableComponent.h"
 
 
 //constructor
@@ -165,7 +167,7 @@ void ParticleFluidEmitter::update(float delta)
 }
 
 //simple routine to render our particles
-void ParticleFluidEmitter::renderParticles()
+void ParticleFluidEmitter::renderParticles(BaseCamera* camera, Entity* pRenderingEntity)
 {
 	// lock SDK buffers of *PxParticleSystem* ps for reading
 	PxParticleFluidReadData * fd = m_pf->lockParticleFluidReadData();
@@ -185,6 +187,8 @@ void ParticleFluidEmitter::renderParticles()
 				//we can use this to decide if the particle is seperate or part of a larger body of fluid
 				glm::vec3 pos(positionIt->x,positionIt->y,positionIt->z);
 //				Gizmos::addAABBFilled(pos,glm::vec3(.12,.12,.12),glm::vec4(1,0,1,1));
+				pRenderingEntity->SetWorldTranslation(pos);
+				static_cast<RenderableComponent*>(pRenderingEntity->GetComponentOfType("Renderable"))->Draw(camera);
 			}
 		}
 		// return ownership of the buffers back to the SDK
