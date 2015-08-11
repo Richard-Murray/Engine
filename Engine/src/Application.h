@@ -166,9 +166,11 @@ class MyCollisionCallBack : public PxSimulationEventCallback
 			std::cout << " Entered Trigger ";
 			std::cout << triggerActor->getName() << endl;
 		}
-	};	virtual void onConstraintBreak(PxConstraintInfo*, PxU32){};
+	};
+	virtual void onConstraintBreak(PxConstraintInfo*, PxU32){};
 	virtual void onWake(PxActor**, PxU32){};
-	virtual void onSleep(PxActor**, PxU32){};
+	virtual void onSleep(PxActor**, PxU32){};
+
 };
 
 

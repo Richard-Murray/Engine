@@ -559,6 +559,8 @@ void Application::Load()
 
 	m_renderer->AddRagdollRendering(m_ragdollTest); //ragdollrendering
 	m_renderer->AddFluidRendering(m_particleEmitter);
+
+
 }
 
 void Application::InitialisePhysX()
@@ -571,13 +573,15 @@ void Application::InitialisePhysX()
 	g_PhysicsMaterial = g_Physics->createMaterial(0.5f, 0.5f, .5f);
 	PxSceneDesc sceneDesc(g_Physics->getTolerancesScale());
 	sceneDesc.gravity = PxVec3(0, -10.0f, 0);
-	sceneDesc.filterShader = &physx::PxDefaultSimulationFilterShader;
+	sceneDesc.filterShader = &physx::PxDefaultSimulationFilterShader; //filter shader
 	sceneDesc.cpuDispatcher = PxDefaultCpuDispatcherCreate(1);
 	g_PhysicsScene = g_Physics->createScene(sceneDesc);
 
 	g_PhysicsCooker = PxCreateCooking(PX_PHYSICS_VERSION, *g_PhysicsFoundation, PxCookingParams(PxTolerancesScale()));
 
-	//PxSimulationEventCallback* myCollisionCallBack = new MyCollisionCallBack
+	//TRIGGER VOLUMES
+	PxSimulationEventCallback* myCollisionCallBack = new MyCollisionCallBack();
+	g_PhysicsScene->setSimulationEventCallback(myCollisionCallBack);
 }
 
 void Application::InitialisePlayerController()
