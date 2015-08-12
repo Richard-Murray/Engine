@@ -36,6 +36,30 @@ class MyControllerHitReport;
 class Application
 {
 public:
+	static PxFilterFlags myFliterShader(PxFilterObjectAttributes attributes0, PxFilterData
+		filterData0,
+		PxFilterObjectAttributes attributes1, PxFilterData filterData1,
+		PxPairFlags& pairFlags, const void* constantBlock, PxU32 constantBlockSize)
+	{
+		// let triggers through
+		if (PxFilterObjectIsTrigger(attributes0) ||
+			PxFilterObjectIsTrigger(attributes1))
+		{
+			pairFlags = PxPairFlag::eTRIGGER_DEFAULT;
+			return PxFilterFlag::eDEFAULT;
+		}
+
+		// generate contacts for all that were not filtered above
+		pairFlags = PxPairFlag::eCONTACT_DEFAULT;
+
+		// trigger the contact callback for pairs (A,B) where
+		// the filtermask of A contains the ID of B and vice versa.
+		if ((filterData0.word0 & filterData1.word1) && (filterData1.word0 & filterData0.word1))
+			pairFlags |= PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_TOUCH_LOST;
+		return PxFilterFlag::eDEFAULT;
+	}
+
+
 	Application();
 	~Application();
 
@@ -45,6 +69,8 @@ public:
 
 	void Update(float deltaTime);
 	void Draw();
+
+	void SetDeltaTimeModifier(float deltaTimeModifier){ m_deltaTimeModifier = deltaTimeModifier; };
 
 private:
 
@@ -98,7 +124,7 @@ private:
 	float _characterRotation;
 
 	float gameWorldDeltaTime = 0;
-	float deltaTimeModifier = 1;
+	float m_deltaTimeModifier = 1;
 
 	float FPSRefresh = 0;
 	float framesPerSecond = 0;
@@ -165,11 +191,22 @@ class MyCollisionCallBack : public PxSimulationEventCallback
 			std::cout << otherActor->getName();
 			std::cout << " Entered Trigger ";
 			std::cout << triggerActor->getName() << endl;
+			if (otherActor->getName() == "PlayerActor")
+			{
+				m_pApplication->SetDeltaTimeModifier(500);
+			}
 		}
 	};
 	virtual void onConstraintBreak(PxConstraintInfo*, PxU32){};
 	virtual void onWake(PxActor**, PxU32){};
 	virtual void onSleep(PxActor**, PxU32){};
+
+public:
+	void SetApplication(Application* application){ m_pApplication = application; };
+
+private:
+
+	Application* m_pApplication;
 
 };
 

@@ -65,9 +65,12 @@ void Renderer::DrawGeometryPass(BaseCamera* camera)
 		(*iter)->Draw(camera);
 	}
 
+	static_cast<RenderableComponent*>(m_pEntityManager->GetEntity("ragdollrenderer")->GetComponentOfType("Renderable"))->AttachTexture("Red");
+
 	PxU32 nLinks = m_pRagdoll->GetArticulation()->getNbLinks();
 	PxArticulationLink** links = new PxArticulationLink*[nLinks];
-	m_pRagdoll->GetArticulation()->getLinks(links, nLinks);	while (nLinks--)
+	m_pRagdoll->GetArticulation()->getLinks(links, nLinks);
+	while (nLinks--)
 	{
 		PxArticulationLink* link = links[nLinks];
 		PxU32 nShapes = link->getNbShapes();
@@ -92,6 +95,8 @@ void Renderer::DrawGeometryPass(BaseCamera* camera)
 		}
 	}
 	delete[] links;
+
+	static_cast<RenderableComponent*>(m_pEntityManager->GetEntity("ragdollrenderer")->GetComponentOfType("Renderable"))->AttachTexture("Cyan");
 
 	m_pFluidEmitter->renderParticles(camera, m_pEntityManager->GetEntity("ragdollrenderer"));
 

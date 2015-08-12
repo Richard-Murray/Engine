@@ -20,6 +20,8 @@ void PhysxPhysicsComponent::Initialise()
 {
 	SetComponentType("PhysxPhysics");
 	//m_dynamicActor->setName("unnamed");
+
+	
 }
 
 void PhysxPhysicsComponent::SetName(const char* name, bool dynamic)
@@ -103,6 +105,11 @@ void PhysxPhysicsComponent::SetBox(glm::vec3 boxGeometry, float density, bool dy
 	}
 	
 	SetPhysicsObjectType("Box");
+
+	if (m_dynamic)
+		SetUpFiltering(m_dynamicActor, FilterGroup::eGENERICOBJECT, FilterGroup::eGROUND);
+	else
+		SetUpFiltering(m_staticActor, FilterGroup::eGENERICOBJECT, FilterGroup::eGROUND);
 }
 
 void PhysxPhysicsComponent::SetSphere(float radius, float density, bool dynamic)
@@ -134,6 +141,11 @@ void PhysxPhysicsComponent::SetSphere(float radius, float density, bool dynamic)
 	//m_dynamicActor = PxCreateDynamic(*m_physics, transform, sphere, *m_material, density);
 	//m_physicsScene->addActor(*m_dynamicActor);
 	SetPhysicsObjectType("Sphere");
+
+	if (m_dynamic)
+		SetUpFiltering(m_dynamicActor, FilterGroup::eGENERICOBJECT, FilterGroup::eGROUND);
+	else
+		SetUpFiltering(m_staticActor, FilterGroup::eGENERICOBJECT, FilterGroup::eGROUND);
 }
 
 void PhysxPhysicsComponent::SetCapsule(float radius, float halfHeight, float density, bool dynamic)
@@ -217,4 +229,33 @@ void PhysxPhysicsComponent::AttachRigidBodyConvex(FBXFile* m_FBX, float density,
 
 	m_dynamic = true;
 	SetPhysicsObjectType("Mesh");
+}
+
+//helper function to set up filtering
+void PhysxPhysicsComponent::SetUpFiltering(PxRigidActor* actor, PxU32 filterGroup, PxU32 filterMask)
+{
+	PxFilterData filterData;
+	filterData.word0 = filterGroup; // word0 = own ID
+	filterData.word1 = filterMask; // word1 = ID mask to filter pairs that trigger a contact callback;
+	const PxU32 numShapes = actor->getNbShapes();
+	PxShape** shapes = (PxShape**)_aligned_malloc(sizeof(PxShape*)*numShapes, 16);
+	actor->getShapes(shapes, numShapes);
+	for (PxU32 i = 0; i < numShapes; i++)
+	{
+		PxShape* shape = shapes[i];
+		shape->setSimulationFilterData(filterData);
+	}
+	_aligned_free(shapes);
+}void PhysxPhysicsComponent::SetShapeAsTrigger(/*PxRigidActor* actorIn*/)
+{
+	PxRigidStatic* staticActor = m_staticActor;//actorIn->is<PxRigidStatic>();
+	assert(staticActor);
+	const PxU32 numShapes = staticActor->getNbShapes();
+	PxShape** shapes = (PxShape**)_aligned_malloc(sizeof(PxShape*)*numShapes, 16);
+	staticActor->getShapes(shapes, numShapes);
+	for (PxU32 i = 0; i < numShapes; i++)
+	{
+		shapes[i]->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
+		shapes[i]->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
+	}
 }

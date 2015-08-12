@@ -131,25 +131,25 @@ void Application::Update(float deltaTime)
 
 	if (glfwGetKey(m_window, GLFW_KEY_T) == GLFW_PRESS)
 	{
-		deltaTimeModifier += deltaTimeModifier * 0.1f;
+		m_deltaTimeModifier += m_deltaTimeModifier * 0.1f;
 	}
 	if (glfwGetKey(m_window, GLFW_KEY_Y) == GLFW_PRESS)
 	{
-		deltaTimeModifier -= deltaTimeModifier * 0.1f;
-		if (deltaTimeModifier < 0.1f)
+		m_deltaTimeModifier -= m_deltaTimeModifier * 0.1f;
+		if (m_deltaTimeModifier < 0.1f)
 		{
-			deltaTimeModifier = 0.1f;
+			m_deltaTimeModifier = 0.1f;
 		}
 	}
 	if (glfwGetKey(m_window, GLFW_KEY_U) == GLFW_PRESS)
 	{
-		deltaTimeModifier = 1;
+		m_deltaTimeModifier = 1;
 	}
-	if (deltaTimeModifier < 0.1f)
+	if (m_deltaTimeModifier < 0.1f)
 	{
-		deltaTimeModifier = 0.1f;
+		m_deltaTimeModifier = 0.1f;
 	}
-	gameWorldDeltaTime = deltaTime / deltaTimeModifier;
+	gameWorldDeltaTime = deltaTime / m_deltaTimeModifier;
 	if (glfwGetKey(m_window, GLFW_KEY_R) == GLFW_PRESS)
 	{
 		m_entityManager->DeleteEntities();
@@ -546,7 +546,6 @@ void Application::Load()
 
 	m_ragdollTest = new Ragdoll(g_Physics, PxTransform(PxVec3(-5, 50, 0)), 0.1f, g_PhysicsMaterial, g_PhysicsScene);
 
-
 	//std::string test = "ragdollrenderer" + std::to_string(5); //test.c_str()
 	m_entityManager->CreateEntity("ragdollrenderer");
 	m_entityManager->GetNewEntity()->Initialise(m_assetManager);
@@ -560,7 +559,17 @@ void Application::Load()
 	m_renderer->AddRagdollRendering(m_ragdollTest); //ragdollrendering
 	m_renderer->AddFluidRendering(m_particleEmitter);
 
-
+	m_entityManager->CreateEntity("Triggervolume");
+	m_entityManager->GetNewEntity()->Initialise(m_assetManager);
+	m_entityManager->GetNewEntity()->SetWorldTranslation(glm::vec3(-10, 0, -10));
+	m_entityManager->AttachRenderable(m_entityManager->GetNewEntity(), "Cube1", "GeometryPass", "Red");
+	static_cast<RenderableComponent*>(m_entityManager->GetNewEntity()->GetComponentOfType("Renderable"))->SetRenderableTransform(glm::mat4(	5, 0, 0, 0,
+																																			0, 5, 0, 0,
+																																			0, 0, 5, 0,
+																																			0, 0, 0, 1));
+	m_entityManager->AttachPhysxPhysics(m_entityManager->GetNewEntity(), g_Physics, g_PhysicsScene);
+	static_cast<PhysxPhysicsComponent*>(m_entityManager->GetNewEntity()->GetComponentOfType("PhysxPhysics"))->SetBox(glm::vec3(2.5, 2.5, 2.5), 10, false);
+	static_cast<PhysxPhysicsComponent*>(m_entityManager->GetNewEntity()->GetComponentOfType("PhysxPhysics"))->SetShapeAsTrigger();
 }
 
 void Application::InitialisePhysX()
@@ -573,7 +582,8 @@ void Application::InitialisePhysX()
 	g_PhysicsMaterial = g_Physics->createMaterial(0.5f, 0.5f, .5f);
 	PxSceneDesc sceneDesc(g_Physics->getTolerancesScale());
 	sceneDesc.gravity = PxVec3(0, -10.0f, 0);
-	sceneDesc.filterShader = &physx::PxDefaultSimulationFilterShader; //filter shader
+	sceneDesc.filterShader = myFliterShader;
+	//sceneDesc.filterShader = &physx::PxDefaultSimulationFilterShader; //filter shader
 	sceneDesc.cpuDispatcher = PxDefaultCpuDispatcherCreate(1);
 	g_PhysicsScene = g_Physics->createScene(sceneDesc);
 
@@ -581,7 +591,7 @@ void Application::InitialisePhysX()
 
 	//TRIGGER VOLUMES
 	PxSimulationEventCallback* myCollisionCallBack = new MyCollisionCallBack();
-	g_PhysicsScene->setSimulationEventCallback(myCollisionCallBack);
+	g_PhysicsScene->setSimulationEventCallback(myCollisionCallBack);	static_cast<MyCollisionCallBack*>(myCollisionCallBack)->SetApplication(this);
 }
 
 void Application::InitialisePlayerController()
@@ -606,6 +616,8 @@ void Application::InitialisePlayerController()
 	_playerGravity = -0.5f; //set up the player gravity
 	myHitReport->clearPlayerContactNormal(); //initialize the contact normal (what we are in contact with)
 	//	addToActorList(gPlayerController->getActor()); //so we can draw it's gizmo
+
+	g_PlayerController->getActor()->setName("PlayerActor");
 }
 
 void Application::InitialiseVisualDebugger()

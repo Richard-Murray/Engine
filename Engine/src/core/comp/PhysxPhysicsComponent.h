@@ -27,6 +27,10 @@ public:
 	void SetSphere(float radius, float density, bool dynamic);
 	void SetCapsule(float radius, float halfHeight, float density, bool dynamic);
 	void AttachRigidBodyConvex(FBXFile* m_FBX, float density, PxMaterial* g_PhysicsMaterial, PxCooking* physicsCooker);
+
+	void SetUpFiltering(PxRigidActor* actor, PxU32 filterGroup, PxU32 filterMask);
+	void SetShapeAsTrigger(/*PxRigidActor* actorIn*/);
+
 	//void SetCapsule()
 
 	//void SetSphere(float radius);
@@ -43,6 +47,17 @@ private:
 	float m_radius;
 	const char* m_physicsObjectType;
 	bool m_dynamic;
+};
+
+struct FilterGroup
+{
+	enum Enum
+	{
+		ePLAYER = (1 << 0),
+		ePLATFORM = (1 << 1),
+		eGROUND = (1 << 2),
+		eGENERICOBJECT = (1 << 3)
+	};
 };
 
 #endif
