@@ -191,7 +191,7 @@ class MyCollisionCallBack : public PxSimulationEventCallback
 			std::cout << otherActor->getName();
 			std::cout << " Entered Trigger ";
 			std::cout << triggerActor->getName() << endl;
-			if (otherActor->getName() == "PlayerActor")
+			if (strcmp(otherActor->getName(), "PlayerActor") == 0)
 			{
 				m_pApplication->SetDeltaTimeModifier(500);
 			}
