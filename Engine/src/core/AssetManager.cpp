@@ -44,7 +44,7 @@ Model* AssetManager::GetModel(const char* idName)
 	{
 		for (auto iter = m_modelList.begin(); iter != m_modelList.end(); iter++)
 		{
-			if ((*iter)->GetID() == idName)
+			if (strcmp((*iter)->GetID(), idName) == 0)
 			{
 				return (*iter);
 			}
@@ -62,7 +62,7 @@ unsigned int AssetManager::GetShader(const char* idName)
 {
 	for (auto iter = m_shaderList.begin(); iter != m_shaderList.end(); iter++)
 	{
-		if ((*iter)->GetID() == idName)
+		if (strcmp((*iter)->GetID(), idName) == 0)
 		{
 			return (*iter)->GetAsset();
 		}
@@ -78,7 +78,7 @@ unsigned int AssetManager::GetTexture(const char* idName)
 {
 	for (auto iter = m_textureList.begin(); iter != m_textureList.end(); iter++)
 	{
-		if ((*iter)->GetID() == idName)
+		if (strcmp((*iter)->GetID(), idName) == 0)
 		{
 			return (*iter)->GetAsset();
 		}
@@ -94,7 +94,7 @@ bool AssetManager::DoesModelExist(const char* idName)
 {
 	for (auto iter = m_modelList.begin(); iter != m_modelList.end(); iter++)
 	{
-		if ((*iter)->GetID() == idName)
+		if (strcmp((*iter)->GetID(), idName) == 0)
 		{
 			return true;
 		}

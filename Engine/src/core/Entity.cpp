@@ -118,7 +118,7 @@ Component* Entity::GetComponentOfType(const char* type)
 {
 	for (auto iter = m_componentList.begin(); iter != m_componentList.end(); iter++)
 	{
-		if ((*iter)->GetComponentType() == type)
+		if (strcmp((*iter)->GetComponentType(), type) == 0)
 		{
 			return (*iter);
 		}

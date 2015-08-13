@@ -591,7 +591,9 @@ void Application::InitialisePhysX()
 
 	//TRIGGER VOLUMES
 	PxSimulationEventCallback* myCollisionCallBack = new MyCollisionCallBack();
-	g_PhysicsScene->setSimulationEventCallback(myCollisionCallBack);	static_cast<MyCollisionCallBack*>(myCollisionCallBack)->SetApplication(this);
+	g_PhysicsScene->setSimulationEventCallback(myCollisionCallBack);
+	static_cast<MyCollisionCallBack*>(myCollisionCallBack)->SetApplication(this);
+
 }
 
 void Application::InitialisePlayerController()

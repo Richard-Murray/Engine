@@ -210,19 +210,25 @@ void PhysxPhysicsComponent::AttachRigidBodyConvex(FBXFile* m_FBX, float density,
 	convexDesc.points.data = verts;
 	convexDesc.flags = PxConvexFlag::eCOMPUTE_CONVEX;
 	convexDesc.vertexLimit = 128;
+
 	PxDefaultMemoryOutputStream* buf = new PxDefaultMemoryOutputStream();
-	assert(physicsCooker->cookConvexMesh(convexDesc, *buf));
+	bool bSucceed = physicsCooker->cookConvexMesh(convexDesc, *buf);
+	assert(bSucceed);
+
 	PxU8* contents = buf->getData();
 	PxU32 size = buf->getSize();
 	PxDefaultMemoryInputData input(contents, size);
 	PxConvexMesh* convexMesh = m_physics->createConvexMesh(input);
 	PxTransform pose = PxTransform(PxVec3(0.0f, 0, 0.0f));
-	PxShape* convexShape = m_dynamicActor->createShape(PxConvexMeshGeometry(convexMesh), *g_PhysicsMaterial, pose);
+
 	//remove the placeholder box we started with
 	int numberShapes = m_dynamicActor->getNbShapes();
 	PxShape** shapes = (PxShape**)_aligned_malloc(sizeof(PxShape*)*numberShapes, 16);
 	m_dynamicActor->getShapes(shapes, numberShapes);
 	m_dynamicActor->detachShape(**shapes);
+
+	PxShape* convexShape = m_dynamicActor->createShape(PxConvexMeshGeometry(convexMesh), *g_PhysicsMaterial, pose);
+	
 	delete(verts); //delete our temporary vert buffer.
 	//Add it to the scene
 	m_physicsScene->addActor(*m_dynamicActor);
@@ -246,7 +252,9 @@ void PhysxPhysicsComponent::SetUpFiltering(PxRigidActor* actor, PxU32 filterGrou
 		shape->setSimulationFilterData(filterData);
 	}
 	_aligned_free(shapes);
-}void PhysxPhysicsComponent::SetShapeAsTrigger(/*PxRigidActor* actorIn*/)
+}
+
+void PhysxPhysicsComponent::SetShapeAsTrigger(/*PxRigidActor* actorIn*/)
 {
 	PxRigidStatic* staticActor = m_staticActor;//actorIn->is<PxRigidStatic>();
 	assert(staticActor);

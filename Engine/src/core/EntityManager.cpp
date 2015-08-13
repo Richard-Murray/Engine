@@ -55,7 +55,7 @@ Entity* EntityManager::GetEntity(const char* idName)
 {
 	for (auto iter = m_entityList.begin(); iter != m_entityList.end(); iter++)
 	{
-		if ((*iter)->GetID() == idName)
+		if (strcmp((*iter)->GetID(), idName) == 0)
 			return (*iter);
 	}
 
